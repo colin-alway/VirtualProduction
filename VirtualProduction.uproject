@@ -134,6 +134,10 @@
 		{
 			"Name": "MovieRenderPipeline",
 			"Enabled": true
+		},
+		{
+			"Name": "Switchboard",
+			"Enabled": true
 		}
 	]
 }
