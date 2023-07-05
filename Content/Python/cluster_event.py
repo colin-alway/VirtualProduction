@@ -11,6 +11,7 @@ convert int to/from bytes array:
 """
 import json
 import socket
+import struct
 import sys
 import time
 
@@ -28,10 +29,11 @@ def main():
     }
     event_string = json.dumps(event)
     event_string = '{"Name":"quit","Type":"command","Category":"","Parameters":{}}'
-    print("event_string '{}'".format(event_string))
-    event_length = len(event_string)
-    print("length {} {}".format(event_length, event_length.to_bytes(4)))
 
+    msg = bytes(event_string, "utf-8")
+    print("bytes '{}'".format(msg))
+    msg = struct.pack("I", len(msg)) + msg
+    print("struct '{}'".format(msg))
 
     # Create a socket (SOCK_STREAM means a TCP socket)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,8 +41,7 @@ def main():
     try:
         # Connect to server and send data
         sock.connect((HOST, PORT))
-        sock.sendall(event_length.to_bytes(4))
-        sock.sendall(str.encode(event_string))
+        sock.send(msg)
 
         # Receive data from the server and shut down
         # received = sock.recv(1024)
